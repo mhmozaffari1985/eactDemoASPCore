@@ -49,15 +49,29 @@ class CommentForm extends React.Component {
 }
 
 class CommentBox extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { data: [] };
+    }
+    componentWillMount() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', this.props.url, true);
+        xhr.onload = () => {
+            const data = JSON.parse(xhr.responseText);
+            this.setState({ data: data });
+        };
+        xhr.send();
+    }
     render() {
         return (
             <div className="commentBox">
                 <h1>Comments</h1>
-                <CommentList data={this.props.data} />
+                <CommentList data={this.state.data} />
                 <CommentForm />
             </div>
         );
     }
 }
 
-ReactDOM.render(<CommentBox data={data} />, document.getElementById('content'));
+ReactDOM.render(<CommentBox url="/comments" />,
+    document.getElementById('content'));
