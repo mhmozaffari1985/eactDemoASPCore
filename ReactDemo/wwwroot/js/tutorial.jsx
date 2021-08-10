@@ -15,7 +15,7 @@ function createRemarkable() {
 
 class Comment extends React.Component {
     rawMarkup() {
-        const md = new Remarkable();
+        const md = createRemarkable();
         const rawMarkup = md.render(this.props.children.toString());
         return { __html: rawMarkup };
     }
@@ -88,7 +88,7 @@ class CommentForm extends React.Component {
 class CommentBox extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { data: [] };
+        this.state = { data: this.props.initialData };
         this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
     }
     loadCommentsFromServer() {
@@ -118,7 +118,6 @@ class CommentBox extends React.Component {
         xhr.send(data);
     }
     componentDidMount() {
-        this.loadCommentsFromServer();
         window.setInterval(
             () => this.loadCommentsFromServer(),
             this.props.pollInterval,
@@ -135,11 +134,11 @@ class CommentBox extends React.Component {
     }
 }
 
-ReactDOM.render(
-    <CommentBox
-        url="/comments"
-        submitUrl="/comments/new"
-        pollInterval={2000}
-    />,
-    document.getElementById('content'),
-);
+//ReactDOM.render(
+//    <CommentBox
+//        url="/comments"
+//        submitUrl="/comments/new"
+//        pollInterval={2000}
+//    />,
+//    document.getElementById('content'),
+//);
